@@ -5,32 +5,46 @@ $(document).ready(function () {
         const dataId = $(this).attr('data-id');
         console.log(typeof dataId)
         console.log(dataId)
-
+        // const data = $(this).attr('data');
+        // console.log(typeof data)
+        // console.log(data)
         $.get("/admin/" + dataId, function (user, status) {
             console.log(user)
+            console.log(typeof user)
             $('.myFormDelete #deleteId').val(user.id);
             $('.myFormDelete #deleteFirstName').val(user.firstName);
             $('.myFormDelete #deleteLastName').val(user.lastName);
             $('.myFormDelete #deleteEmail').val(user.email);
-            $('.myFormDelete #deleteRoles').val(user.roles);
             $('.myFormDelete #formDelete').attr('action', "/admin/" + dataId);
-            // $('.myFormUpdate #username').val(users.username);
-            // $('.myFormUpdate #password').val(users.password);
-            // $('.myFormUpdate #email').val(users.email);
         });
         $('.myFormDelete #deleteModal').modal();
-        // const action = $(this).attr('action');
-        // console.log(typeof action)
-        // console.log(action)
-        // $('.myFormDelete #deleteId').val("1111");
-        // $('#deleteModal').modal();
+    });
 
-        // $('.myFormDelete #username').val(users.username);
-        //             $('.myFormUpdate #password').val(users.password);
-        //             $('.myFormUpdate #email').val(users.email);
-        // const data = $(this).attr('data');
-        // $('#removeModalCenter #delRef').attr('href', href);
-        // $('#removeModalCenter').modal();
+    $('table .eBtn').on('click', function (event) {
+        event.preventDefault();
+        const dataId = $(this).attr('data-id');
+        console.log(typeof dataId)
+        console.log(dataId)
+        const data = $(this).attr('data');
+        console.log(typeof data)
+        console.log(data)
+        $('.myFormEdit #formEdit').attr('action', "/admin/" + dataId);
+        // $('.myFormEdit #formEdit').attr('object', data);
+        // $('.myFormEdit #editFirstName').attr('field', "*{firstName}");
+        // $('.myFormEdit #editLastName').attr('field', "*{lastName}");
+        // $('.myFormEdit #editEmail').attr('field', "*{email}");
+        // $('.myFormEdit #editPassword').attr('field', "*{password}");
+        // $('.myFormEdit #editRoles').attr('field', "*{roles}");
+
+        $.get("/admin/" + dataId, function (user, status) {
+            console.log(user)
+            console.log(typeof user)
+            $('.myFormEdit #editId').val(user.id);
+            $('.myFormEdit #editFirstName').val(user.firstName);
+            $('.myFormEdit #editLastName').val(user.lastName);
+            $('.myFormEdit #editEmail').val(user.email);
+        });
+        $('.myFormEdit #editModal').modal();
     });
 });
 

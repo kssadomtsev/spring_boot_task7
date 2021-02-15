@@ -23,7 +23,7 @@ public class UserController {
     @GetMapping
     public String user(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        model.addAttribute("user", userManager.getByEmail(auth.getName()).get());
+        model.addAttribute("currentUser", userManager.getByEmail(auth.getName()).get());
         return "user/user";
     }
 }

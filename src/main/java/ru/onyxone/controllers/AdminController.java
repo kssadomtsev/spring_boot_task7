@@ -65,14 +65,16 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("user", userManager.get(id));
-        return "admin/edit";
-    }
+//    @GetMapping("/{id}/edit")
+//    public String edit(Model model, @PathVariable("id") int id) {
+//        model.addAttribute("user", userManager.get(id));
+//        return "admin/edit";
+//    }
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("user") User user, @PathVariable("id") int id) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(Util.getRolesByRoleObj(user.getRoles(), userManager));
         userManager.update(user);
         return "redirect:/admin";
     }
