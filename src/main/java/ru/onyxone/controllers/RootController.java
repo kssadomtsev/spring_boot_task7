@@ -35,8 +35,8 @@ public class RootController {
 
     @PostMapping("/registration")
     public String registrationPost(@ModelAttribute("user") @Valid User user, final BindingResult bindingResult, Model model) {
-        boolean isUserExisting = userManager.getByEmail(user.getEmail()).isPresent();
-        if (userManager.getByEmail(user.getEmail()).isEmpty()) {
+        boolean ifPresent = userManager.getByEmail(user.getEmail()).isPresent();
+        if (!ifPresent) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setRoles(Util.getRolesByString(new String[]{"USER"}, userManager));
             userManager.create(user);

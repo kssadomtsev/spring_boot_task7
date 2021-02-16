@@ -12,6 +12,7 @@ import ru.onyxone.models.User;
 import ru.onyxone.services.UserManager;
 import ru.onyxone.utils.Util;
 
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -29,28 +30,20 @@ public class AdminController {
     @GetMapping
     public String index(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = userManager.getByEmail(auth.getName()).get();
+        User currentUser = userManager.getByEmail(auth.getName()).orElseThrow(() -> new IllegalStateException("User not found"));
+
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("newUser", new User());
-        model.addAttribute("users", userManager.getAll());
+        List<User> all = userManager.getAll();
+        model.addAttribute("users", all);
         return "admin/list";
     }
 
     @GetMapping("/{id}")
     @ResponseBody
     public User get(@PathVariable("id") int id) {
-        return userManager.get(id);
+        return userManager.get(id).orElseThrow(() -> new IllegalStateException("User not found"));
     }
-
-//    public String get(@PathVariable("id") int id, Model model) {
-//        model.addAttribute("user", userManager.get(id));
-//        return "admin/get";
-//    }
-
-//    @GetMapping("/new")
-//    public String newUser(@ModelAttribute("user") User user) {
-//        return "admin/new";
-//    }
 
     @PostMapping
     public String create(@ModelAttribute("user") User user, Model model) {
@@ -65,11 +58,6 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-//    @GetMapping("/{id}/edit")
-//    public String edit(Model model, @PathVariable("id") int id) {
-//        model.addAttribute("user", userManager.get(id));
-//        return "admin/edit";
-//    }
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("user") User user, @PathVariable("id") int id) {

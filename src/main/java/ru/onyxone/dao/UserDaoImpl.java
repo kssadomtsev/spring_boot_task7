@@ -21,7 +21,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<User> get(int id) {
         return entityManager
-                .createQuery("SELECT u FROM User u WHERE u.id =:id", User.class)
+                .createQuery("SELECT u FROM User u JOIN fetch u.roles r WHERE u.id =:id", User.class)
                 .setParameter("id", id)
                 .setMaxResults(1)
                 .getResultList()
@@ -32,14 +32,14 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getAll() {
         return entityManager
-                .createQuery("SELECT u FROM User u", User.class)
+                .createQuery("SELECT DISTINCT u FROM User u JOIN fetch u.roles", User.class)
                 .getResultList();
     }
 
     @Override
     public void update(User updatedUser) {
         int id = Math.toIntExact(updatedUser.getId());
-        User currentUser = get(id).get();
+        User currentUser = get(id).orElseThrow(() -> new IllegalStateException("User not found"));
         currentUser.setFirstName(updatedUser.getFirstName());
         currentUser.setLastName(updatedUser.getLastName());
         currentUser.setEmail(updatedUser.getEmail());
@@ -60,7 +60,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<User> getByEmail(String email) {
         return entityManager
-                .createQuery("SELECT u FROM User u WHERE u.email =:email", User.class)
+                .createQuery("SELECT u FROM User u JOIN fetch u.roles r WHERE u.email =:email", User.class)
                 .setParameter("email", email)
                 .setMaxResults(1)
                 .getResultList()
