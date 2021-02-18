@@ -9,11 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.onyxone.models.Role;
 import ru.onyxone.models.User;
 import ru.onyxone.services.UserManager;
-import ru.onyxone.utils.Util;
 
 import javax.validation.Valid;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/")
@@ -38,7 +39,9 @@ public class RootController {
         boolean ifPresent = userManager.getByEmail(user.getEmail()).isPresent();
         if (!ifPresent) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.setRoles(Util.getRolesByString(new String[]{"USER"}, userManager));
+            Role newUserRole = new Role("USER");
+            newUserRole.setUser(user);
+            user.setRoles(Set.of(newUserRole));
             userManager.create(user);
             return "redirect:/login";
         } else {
