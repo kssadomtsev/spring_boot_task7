@@ -32,7 +32,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getAll() {
         return entityManager
-                .createQuery("SELECT DISTINCT u FROM User u JOIN fetch u.roles", User.class)
+                .createQuery("SELECT u FROM User u", User.class)
                 .getResultList();
     }
 
