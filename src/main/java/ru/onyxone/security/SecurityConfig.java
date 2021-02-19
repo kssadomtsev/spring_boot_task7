@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -44,10 +45,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .csrf().disable()
+//                .httpBasic()
+//                .and()
                 .authorizeRequests()
                 .antMatchers("/", "/login","/registration").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
-                .antMatchers("/user/**").hasAuthority("USER");
+                .antMatchers("/user/**").hasAuthority("USER")
+                .antMatchers(HttpMethod.GET, "/rest/users").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.GET, "/rest/users/**").hasAuthority("USER")
+                .antMatchers(HttpMethod.POST, "/rest/users").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/rest/users/**").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/rest/users/**").hasAuthority("ADMIN");
     }
 
     @Bean
