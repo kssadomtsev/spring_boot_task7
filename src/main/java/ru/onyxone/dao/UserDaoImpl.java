@@ -43,6 +43,7 @@ public class UserDaoImpl implements UserDao {
         currentUser.setFirstName(updatedUser.getFirstName());
         currentUser.setLastName(updatedUser.getLastName());
         currentUser.setEmail(updatedUser.getEmail());
+        currentUser.setRoles(updatedUser.getRoles());
         entityManager.persist(currentUser);
     }
 
