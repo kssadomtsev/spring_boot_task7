@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,8 +36,8 @@ public class User {
     @NotBlank(message = "Password can not be empty")
     private String password;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-    private Set<Role> roles;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
+    private Set<Role> roles  = new HashSet<>();
 
     public User() {
     }
@@ -105,7 +106,10 @@ public class User {
     }
 
     public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+        this.roles.clear();
+        if (roles != null) {
+            this.roles.addAll(roles);
+        }
     }
 
     @Override

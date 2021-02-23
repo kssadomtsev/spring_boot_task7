@@ -1,37 +1,16 @@
 const apiUsersUri = 'http://localhost:8080/rest/users/'
 
 $(document).ready(function () {
+    fillUsersTable();
+})
 
+let fillUsersTable = function () {
     let requestOptions = {
         method: 'GET',
         body: null
     };
 
-    fillUsersTable(sendFetchRequest(apiUsersUri, requestOptions));
-
-    $('.table .delBtn').on('click', function (event) {
-        event.preventDefault();
-        const dataId = $(this).attr('data-id');
-        console.log(typeof dataId)
-        console.log(dataId)
-        // const data = $(this).attr('data');
-        // console.log(typeof data)
-        // console.log(data)
-        $.get("/admin/" + dataId, function (user, status) {
-            console.log(user)
-            console.log(typeof user)
-            $('.myFormDelete #deleteId').val(user.id);
-            $('.myFormDelete #deleteFirstName').val(user.firstName);
-            $('.myFormDelete #deleteLastName').val(user.lastName);
-            $('.myFormDelete #deleteEmail').val(user.email);
-            $('.myFormDelete #formDelete').attr('action', "/admin/" + dataId);
-        });
-        $('.myFormDelete #deleteModal').modal();
-    });
-})
-
-let fillUsersTable = function (listAllUsers) {
-    listAllUsers.then(function (data) {
+    sendFetchRequest(apiUsersUri, requestOptions).then(function (data) {
         $("#tDataUsers").empty();
 
         data.forEach(function (user) {
@@ -59,24 +38,47 @@ function getUserEdit(id) {
         method: 'GET',
         body: null
     };
-    let promiseUser = sendFetchRequest(apiUsersUri + id, requestOptions);
     let fillForm = function (promiseUser) {
         promiseUser.then(function (user) {
-            console.log(user)
-            let bookForm = modal.find('.bookForm');
             $('.myFormEdit #editId').val(user.id);
             $('.myFormEdit #editFirstName').val(user.firstName);
             $('.myFormEdit #editLastName').val(user.lastName);
             $('.myFormEdit #editEmail').val(user.email);
+            $('.myFormEdit #editPassword').val("");
             $('.myFormEdit #editRoles').val(user.roles);
-            $("#editRoles option:last").prop('selected', true);
         })
             .catch(function (error) {
                 console.log("Error " + error);
             })
     }
-
+    fillForm(sendFetchRequest(apiUsersUri + id, requestOptions))
 }
+
+function editUser() {
+    let id = $("#editId").val();
+
+    let user = {
+        id: id,
+        firstName: $("#editFirstName").val(),
+        lastName: $("#editLastName").val(),
+        email: $("#editEmail").val(),
+        password: $("#editPassword").val(),
+        roles: $("#editRoles").val(),
+    }
+
+    let requestOptions = {
+        method: 'PUT',
+        body: JSON.stringify(user),
+        headers: {
+            "Content-Type": "application/json; charset=UTF-8"
+        }
+    };
+    sendFetchRequest(apiUsersUri + id, requestOptions)
+        .then(function () {
+            fillUsersTable();
+        })
+}
+
 
 
 function getUserDelete(id) {
@@ -85,7 +87,6 @@ function getUserDelete(id) {
         method: 'GET',
         body: null
     };
-    let promiseUser = sendFetchRequest(apiUsersUri + id, requestOptions);
     let fillForm = function (promiseUser) {
         promiseUser.then(function (user) {
             console.log(user)
@@ -93,7 +94,56 @@ function getUserDelete(id) {
             $('.myFormDelete #deleteFirstName').val(user.firstName);
             $('.myFormDelete #deleteLastName').val(user.lastName);
             $('.myFormDelete #deleteEmail').val(user.email);
-            $("#editRoles option:last").prop('selected', true);
+            $('.myFormDelete #deleteRoles').val(user.roles);
         })
+            .catch(function (error) {
+                console.log("Error " + error);
+            })
     }
+    fillForm(sendFetchRequest(apiUsersUri + id, requestOptions))
+}
+
+function deleteUser() {
+    let id = $("#deleteId").val();
+
+    let requestOptions = {
+        method: 'DELETE',
+        body: null
+    };
+    sendFetchRequest(apiUsersUri + id, requestOptions)
+        .then(function () {
+            fillUsersTable();
+        })
+}
+
+function addUser() {
+
+    let user = {
+        firstName: $("#firstName").val(),
+        lastName: $("#lastName").val(),
+        email: $("#email").val(),
+        password: $("#password").val(),
+        roles: $("#roles").val(),
+    }
+
+    let requestOptions = {
+        method: 'POST',
+        body: JSON.stringify(user),
+        headers: {
+            "Content-Type": "application/json; charset=UTF-8"
+        }
+    };
+    sendFetchRequest(apiUsersUri, requestOptions)
+        .then(function () {
+            fillUsersTable();
+            $('#usersTable').addClass("show active");
+            $('#navAllUsers').addClass('active');
+            $('#newUser').removeClass("show active");
+            $('#navNewUser').removeClass("active");
+            $(':input','#formNew')
+                .not(':button, :submit, :reset, :hidden')
+                .val('')
+                .prop('checked', false)
+                .prop('selected', false);
+        })
 }

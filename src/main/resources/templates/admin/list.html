@@ -88,27 +88,26 @@
                             </div>
                             <div class="card-block row justify-content-center text-center font-weight-bold"
                                  style="padding: 10px 0">
-                                <form class="form-horizontal" method="post" th:action="@{/admin}"
-                                      th:object="${newUser}">
+                                <form id="formNew" class="form-horizontal">
                                     <div class="form-group">
-                                        <label for="first_name" class="cols-sm-2 control-label">First name</label>
+                                        <label for="firstName" class="cols-sm-2 control-label">First name</label>
                                         <div class="cols-sm-10">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="fa fa-user fa"
                                                                                    aria-hidden="true"></i></span>
-                                                <input type="text" class="form-control" th:field="*{firstName}"
-                                                       id="first_name" placeholder="Enter your first name"/>
+                                                <input type="text" class="form-control"
+                                                       id="firstName" placeholder="Enter your first name"/>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="last_name" class="cols-sm-2 control-label">Last name</label>
+                                        <label for="lastName" class="cols-sm-2 control-label">Last name</label>
                                         <div class="cols-sm-10">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="fa fa-user fa"
                                                                                    aria-hidden="true"></i></span>
-                                                <input type="text" class="form-control" th:field="*{lastName}"
-                                                       id="last_name" placeholder="Enter your last name"/>
+                                                <input type="text" class="form-control"
+                                                       id="lastName" placeholder="Enter your last name"/>
                                             </div>
                                         </div>
                                     </div>
@@ -118,7 +117,7 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="fa fa-user fa-lg"
                                                                                    aria-hidden="true"></i></span>
-                                                <input type="email" class="form-control" th:field="*{email}" id="email"
+                                                <input type="email" class="form-control" id="email"
                                                        placeholder="Enter your email"/>
                                             </div>
                                         </div>
@@ -129,27 +128,25 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="fa fa-lock fa-lg"
                                                                                    aria-hidden="true"></i></span>
-                                                <input type="password" class="form-control" th:field="*{password}"
+                                                <input type="password" class="form-control"
                                                        id="password" placeholder="Enter your Password"/>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="roleSelect">Role</label>
-                                        <select multiple class="form-control" id="roleSelect" size="2"
-                                                th:field="*{roles}">
+                                        <label for="roles">Role</label>
+                                        <select multiple class="form-control" id="roles" size="2">
                                             <option value="ADMIN">ADMIN</option>
                                             <option value="USER" selected>USER</option>
                                         </select>
                                     </div>
 
                                     <div class="form-group ">
-                                        <button type="submit" class="btn btn-success btn-lg">Add new user</button>
+                                        <button type="button"  class="btn btn-success btn-lg" onclick="addUser()">Add new user</button>
                                     </div>
 
                                 </form>
-
 
                             </div>
                         </div>
@@ -198,7 +195,7 @@
 
 <!-- Modal for delete user -->
 <div class="myFormDelete">
-    <form th:method="DELETE" id="formDelete">
+    <form id="formDelete">
         <div class="modal fade"
              id="deleteModal"
              tabindex="-1"
@@ -269,7 +266,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <button type="button" class="btn btn-danger" onclick="deleteUser()" data-dismiss="modal">Delete</button>
                     </div>
 
                 </div>
@@ -280,7 +277,7 @@
 
 <!-- Modal for edit user -->
 <div class="myFormEdit">
-    <form th:method="PATCH" id="formEdit">
+    <form  id="formEdit">
         <div class="modal fade"
              id="editModal"
              tabindex="-1"
@@ -357,7 +354,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" onclick="editUserFunc()">Edit</button>
+                        <button type="button" class="btn btn-primary" onclick="editUser()" data-dismiss="modal">Edit</button>
                     </div>
 
                 </div>
