@@ -6,15 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserDao {
-    public Optional<User> get(int id);
+    Optional<User> findById(int id);
 
-    public List<User> getAll();
+    List<User> findAll();
 
-    public void update(User updatedUser);
+    User save(User user);
 
-    public void create(User user);
+    void deleteById(int id);
 
-    public void delete(int id);
-
-    public Optional<User> getByEmail(String email);
+    Optional<User> findByEmail(String email);
 }

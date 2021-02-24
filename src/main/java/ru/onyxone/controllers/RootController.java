@@ -1,6 +1,8 @@
 package ru.onyxone.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,17 +38,19 @@ public class RootController {
 
     @PostMapping("/registration")
     public String registrationPost(@ModelAttribute("user") @Valid User user, final BindingResult bindingResult, Model model) {
-        boolean ifPresent = userManager.getByEmail(user.getEmail()).isPresent();
-        if (!ifPresent) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            Role newUserRole = new Role("USER");
-            newUserRole.setUser(user);
-            user.setRoles(Set.of(newUserRole));
-            userManager.create(user);
-            return "redirect:/login";
-        } else {
-            model.addAttribute("message", "Email is already used");
-            return "registration";
-        }
+        return userManager.getByEmail(user.getEmail())
+                .map(user1 -> {
+                    model.addAttribute("message", "Email is already used");
+                    return "registration";
+                })
+                .orElseGet(() -> {
+                            user.setPassword(passwordEncoder.encode(user.getPassword()));
+                            Role newUserRole = new Role("USER");
+                            newUserRole.setUser(user);
+                            user.setRoles(Set.of(newUserRole));
+                            userManager.create(user);
+                            return "redirect:/login";
+                        }
+                );
     }
 }

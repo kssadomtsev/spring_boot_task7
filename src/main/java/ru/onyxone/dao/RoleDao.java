@@ -5,7 +5,7 @@ import ru.onyxone.models.Role;
 import java.util.Optional;
 
 public interface RoleDao {
-    public void create(Role role);
+     Role save(Role role);
 
-    public Optional<Role> get(String name);
+     Optional<Role> findByName(String name);
 }
