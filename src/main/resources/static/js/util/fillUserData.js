@@ -1,15 +1,13 @@
-let fillPersonalData = function (user) {
-    user.then(function (data) {
-        $("#tData").append(
-            '<tbody>' +
-            '<tr>' +
-            "<td>" + data.id + "</td>" +
-            "<td>" + data.firstName + "</td>" +
-            "<td>" + data.lastName + "</td>" +
-            "<td>" + data.email + "</td>" +
-            "<td>" + getRolesUserString(data) + "</td>" +
-            +"</tr>" +
-            ' </tbody>'
-        );
-    })
+let fillUserData = function (user) {
+    $("#tData").append(
+        '<tbody>' +
+        '<tr>' +
+        "<td>" + user.id + "</td>" +
+        "<td>" + user.firstName + "</td>" +
+        "<td>" + user.lastName + "</td>" +
+        "<td>" + user.email + "</td>" +
+        "<td>" + getRolesUserString(user) + "</td>" +
+        +"</tr>" +
+        ' </tbody>'
+    );
 }

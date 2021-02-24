@@ -35,7 +35,7 @@
             <a class="nav-link active" id="v-pills-admin-tab" data-toggle="pill" href="#v-pills-UserTable" role="tab"
                aria-selected="true">Admin</a>
             <a class="nav-link" id="v-pills-user-tab" data-toggle="pill" href="#v-pills-User" role="tab"
-               aria-selected="false">User</a>
+               aria-selected="false" onclick="fillUserInfo()">User</a>
         </div>
     </div>
 
@@ -164,7 +164,7 @@
                         <h5>About user</h5>
                     </div>
                     <div class="card-block" style="padding: 10px 0">
-                        <table class="table table-hover">
+                        <table id="tData" class="table table-hover" th:data-id="${currentUser.getId()}">
                             <thead>
                             <tr>
                                 <th>ID</th>
@@ -174,15 +174,6 @@
                                 <th>Role</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td th:text="${currentUser.getId()}"></td>
-                                <td th:text="${currentUser.getFirstName()}"></td>
-                                <td th:text="${currentUser.getLastName()}"></td>
-                                <td th:text="${currentUser.getEmail()}"></td>
-                                <td th:text="${currentUser.printRoles()}"></td>
-                            </tr>
-                            </tbody>
                         </table>
                     </div>
                 </div>

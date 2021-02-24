@@ -147,3 +147,23 @@ function addUser() {
                 .prop('selected', false);
         })
 }
+
+function fillUserInfo(){
+    const dataId = $("#tData").attr('data-id');
+
+    let requestOptions = {
+        method: 'GET',
+        body: null
+    };
+
+    sendFetchRequest(apiUsersUri + dataId, requestOptions)
+        .then(function (user){
+            console.log(user)
+            $("#tData").empty();
+            fillUserData(user)
+            $('#v-pills-User').addClass("show active");
+            $('#v-pills-user-tab').addClass("active");
+            $('#v-pills-UserTable').removeClass("show active");
+            $('#v-pills-admin-tab').removeClass("active");
+        });
+}
